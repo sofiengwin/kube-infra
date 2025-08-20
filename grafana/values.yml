@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx
+spec:
+  project: default
+  source:
+    chart: nginx
+    repoURL: registry-1.docker.io/bitnamicharts/nginx  # note: the oci:// syntax is not included.
+    targetRevision: 21.1.23
+  destination:
+    name: "in-cluster"
+    namespace: nginx
