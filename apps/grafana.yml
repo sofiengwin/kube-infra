@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: grafana
+    targetRevision: 9.3.2
+    helm:
+      releaseName: grafana
+      values: |
+        service:
+          type: LoadBalancer
+        persistence:
+          type: pvc
+          enabled: true
+        adminUser: admin
+        adminPassword: admin
+        ingress:
+          enabled: true
+          hosts:
+            - grafana.godwinogbara.com
+          ingressClassName: traefik
+          annotations:
+            kubernetes.io/ingress.class: traefik
+        initChownData:
+          enabled: false
