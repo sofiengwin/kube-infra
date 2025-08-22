@@ -20,5 +20,12 @@ spec:
         service:
           type: LoadBalancer
         persistence:
+          type: pvc
           enabled: true
-        adminPassword: "Passw0rd999!"
+        adminPassword: "Passw0rd1234"
+        ingress:
+          enabled: true
+          hostname: grafana.godwinogbara.com
+          ingressClassName: traefik
+          annotations:
+            kubernetes.io/ingress.class: traefik
