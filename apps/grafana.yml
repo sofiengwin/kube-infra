@@ -22,7 +22,7 @@ spec:
         persistence:
           type: pvc
           enabled: true
-        adminPassword: "Passw0rd1234"
+        adminPassword: "strongpassword"
         ingress:
           enabled: true
           hosts:
