@@ -25,7 +25,8 @@ spec:
         adminPassword: "Passw0rd1234"
         ingress:
           enabled: true
-          hostname: grafana.godwinogbara.com
+          hosts:
+            - grafana.godwinogbara.com
           ingressClassName: traefik
           annotations:
             kubernetes.io/ingress.class: traefik
