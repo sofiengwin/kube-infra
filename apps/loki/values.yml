@@ -1,4 +1,6 @@
 loki:
+  storage:
+    type: filesystem
   commonConfig:
     replication_factor: 1
   schemaConfig:
