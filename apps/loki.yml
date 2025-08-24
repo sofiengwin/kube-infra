@@ -37,6 +37,12 @@ spec:
         test:
           enabled: false
 
+        ingress:
+          enabled: true
+          hosts:
+            - loki.godwinogbara.com
+          ingressClassName: traefik
+
         loki:
           auth_enabled: false
           commonConfig:
