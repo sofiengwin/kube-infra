@@ -17,7 +17,7 @@ spec:
     helm:
       releaseName: loki
       valuesFiles:
-        - values.yml
+        - ./values.yml
   syncPolicy:
     automated:
       prune: true
