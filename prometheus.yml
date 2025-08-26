@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: prometheus
+    targetRevision: 27.32.0
+    helm:
+      releaseName: prometheus
+      values: |
+        service:
+          type: LoadBalancer
+        ingress:
+          enabled: true
+          hosts:
+            - prometheus.godwinogbara.com
+          ingressClassName: traefik
+          annotations:
+            kubernetes.io/ingress.class: traefik
+        initChownData:
+          enabled: false
