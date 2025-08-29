@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: monitoring
   source:
-    repoURL: https://grafana.github.io/helm-charts
+    repoURL: https://charts.bitnami.com/bitnami
     chart: nginx
     targetRevision: 6.37.0
     helm:
