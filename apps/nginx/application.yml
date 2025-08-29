@@ -17,4 +17,4 @@ spec:
     helm:
       releaseName: nginx
       valueFiles:
-        - .values.yml
+        - values.yml
