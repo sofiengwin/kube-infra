@@ -16,7 +16,7 @@ spec:
     targetRevision: 21.1.23
     helm:
       releaseName: nginx
-      valueObject:
+      valuesObject:
         ingress:
           enabled: true
           hostname: nginx.godwinogbara.com
