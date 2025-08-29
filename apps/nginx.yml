@@ -16,5 +16,7 @@ spec:
     targetRevision: 6.37.0
     helm:
       releaseName: nginx
-      valueFiles:
-        - nginx-values.yml 
+      valuesObject:
+        ingress:
+          enabled: true
+          hostname: nginx.godwinogbara.com
