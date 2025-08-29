@@ -16,3 +16,5 @@ spec:
     targetRevision: 21.1.23
     helm:
       releaseName: nginx
+      valueFiles:
+        - .values.yml
