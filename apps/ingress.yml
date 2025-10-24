@@ -12,7 +12,7 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  number: 8080
+                  number: 443
             pathType: Prefix
             path: /
     - host: "guestbook.godwinogbara.com"
