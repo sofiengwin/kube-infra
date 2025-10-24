@@ -12,7 +12,7 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  number: 80
+                  number: 8080
             pathType: Prefix
             path: /
     - host: "guestbook.godwinogbara.com"
@@ -20,7 +20,7 @@ spec:
         paths:
         - backend:
             service:
-              name: guestbook-ui
+              name: guestbook-helm-guestbook
               port:
                 number: 80
           path: /
