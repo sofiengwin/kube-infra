@@ -3,6 +3,9 @@ kind: Ingress
 metadata:
   name: root-ingress
   namespace: argocd
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
     - host: "argocd.godwinogbara.com"
