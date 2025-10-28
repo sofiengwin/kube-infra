@@ -9,14 +9,14 @@ spec:
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
-  project: monitoring
+  syncOptions:
+    - CreateNamespace=true
+  project: default
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: nginx
     targetRevision: 21.1.23
     helm:
       releaseName: nginx
-      valuesObject:
-        ingress:
-          enabled: true
-          hostname: nginx.godwinogbara.com
+      valueFiles:
+        - values.yml
