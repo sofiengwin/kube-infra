@@ -16,7 +16,7 @@ spec:
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: nginx
-    targetRevision: 21.1.23
+    targetRevision: 22.1.1
     helm:
       releaseName: nginx
       valueFiles:
