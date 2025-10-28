@@ -19,4 +19,4 @@ spec:
     helm:
       releaseName: nginx
       valueFiles:
-        - values.yml
+        - https://raw.githubusercontent.com/sofiengwin/kube-infra/refs/heads/master/apps/nginx/values.yml
