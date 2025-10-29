@@ -40,12 +40,7 @@ grafana:
   adminUser: admin
   adminPassword: admin
   ingress:
-    enabled: true
-    hosts:
-      - grafana.godwinogbara.com
-    path: /
-    annotations:
-      kubernetes.io/ingress.class: traefik
+    enabled: false
 
 kubeApiServer:
   enabled: true
