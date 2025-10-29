@@ -18,5 +18,7 @@ spec:
       releaseName: kube-prometheus-stack
       valueFiles:
         - https://raw.githubusercontent.com/sofiengwin/kube-infra/refs/heads/master/apps/kube-prometheus-stack/values.yml
-
-        
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+      - Replace=true
