@@ -9,11 +9,11 @@ spec:
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
-  project: monitoring
+  project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
     chart: loki
-    targetRevision: 6.37.0
+    targetRevision: 6.44.0
     helm:
       releaseName: loki
       values: |
