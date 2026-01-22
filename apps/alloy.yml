@@ -39,6 +39,22 @@ spec:
                 }
               }
 
+              discovery.relabel "pod_logs" {
+                targets = discovery.kubernetes.pod.targets
+
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  action = "replace"
+                  target_label = "namespace"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_name"]
+                  action = "replace"
+                  target_label = "pod"
+                }
+              }
+
               // local.file_match discovers files on the local filesystem using glob patterns and the doublestar library. It returns an array of file paths.
               local.file_match "node_logs" {
                 path_targets = [{
@@ -54,6 +70,11 @@ spec:
               // You can specify multiple loki.source.file components by giving them different labels.
               loki.source.file "node_logs" {
                 targets    = local.file_match.node_logs.targets
+                forward_to = [loki.write.default.receiver]
+              }
+
+              loki.source.kubernetes "pod_logs" {
+                targets    = discovery.relabel.pod_logs.output
                 forward_to = [loki.write.default.receiver]
               }
 
