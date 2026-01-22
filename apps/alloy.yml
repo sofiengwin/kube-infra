@@ -17,10 +17,52 @@ spec:
     helm:
       releaseName: alloy
       valuesObject:
+        controller:
+          hostNetwork: true
+          hostPID: true
+
         alloy:
           configMap:
             content: |-
               logging {
                 level = "info"
                 format = "logfmt"
+              }
+
+              discovery.kubernetes "pod" {
+                role = "pod"
+
+                // Restrict to pods on the node to reduce cpu & memory usage
+                selectors {
+                  role = "pod"
+                  field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+                }
+              }
+
+              // local.file_match discovers files on the local filesystem using glob patterns and the doublestar library. It returns an array of file paths.
+              local.file_match "node_logs" {
+                path_targets = [{
+                    // Monitor syslog to scrape node-logs
+                    __path__  = "/var/log/syslog",
+                    job       = "node/syslog",
+                    node_name = sys.env("HOSTNAME"),
+                    cluster   = "kube-infra",
+                }]
+              }
+
+              // loki.source.file reads log entries from files and forwards them to other loki.* components.
+              // You can specify multiple loki.source.file components by giving them different labels.
+              loki.source.file "node_logs" {
+                targets    = local.file_match.node_logs.targets
+                forward_to = [loki.write.default.receiver]
+              }
+
+              loki.write "default" {
+                endpoint {
+                  url = "http://192.168.1.220:3100/loki/api/v1/push"
+                }
+              }
+
+              livedebugging {
+                enabled = true
               }
