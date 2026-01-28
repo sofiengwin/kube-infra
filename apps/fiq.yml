@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/fiq.git
+    repoURL: https://github.com/sofiengwin/fiq.git
     targetRevision: HEAD
     path: .chart
     helm:
