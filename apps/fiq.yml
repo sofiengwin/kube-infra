@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: fiq
-  namespace: production
+  namespace: argocd
 spec:
   project: default
   source:
@@ -31,4 +31,4 @@ spec:
           value: "true"
   destination:
     server: https://kubernetes.default.svc
-    namespace: production
+    namespace: argocd
