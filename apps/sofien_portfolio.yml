@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fiq
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sofiengwin/portfolio.git
+    targetRevision: HEAD
+    path: chart
+    helm:
+      parameters:
+        - name: TEST_ENV
+          value: "test"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
