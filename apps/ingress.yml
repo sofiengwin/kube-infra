@@ -28,3 +28,23 @@ spec:
                 number: 80
           path: /
           pathType: Prefix
+    - host: "nginx-one.godwinogbara.com"
+      http:
+        paths:
+        - backend:
+            service:
+              name: nginx-one
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+    - host: "nginx-two.godwinogbara.com"
+      http:
+        paths:
+        - backend:
+            service:
+              name: nginx-two
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
