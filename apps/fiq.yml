@@ -11,12 +11,6 @@ spec:
     path: .chart
     helm:
       parameters:
-        - name: env.DATABASE_URL
-          value: "postgresql://user:password@postgres-host:5432/fiq_production"
-        - name: env.REDIS_URL_SIDEKIQ
-          value: "redis://redis-host:6379/0"
-        - name: env.API_FOOTBALL_KEY
-          value: "your-api-football-key"
         - name: image.tag
           value: "latest"
         - name: replicaCount
@@ -29,6 +23,12 @@ spec:
           value: "true"
         - name: env.RAILS_SERVE_STATIC_FILES
           value: "true"
+        - name: env.DB_HOST
+          value: "postgresql"
+        - name: env.POSTGRES_USER
+          value: "postgres"
+        - name: env.POSTGRES_PASSWORD
+          value: "postgres"
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
