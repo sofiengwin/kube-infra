@@ -9,16 +9,17 @@ for crd in $(kubectl get crd | grep argoproj.io | awk '{print $1}'); do
   kubectl delete crd $crd --ignore-not-found
 done
 
+## Force cleanup
+### List all ArgoCD applications
+kubectl get app -n argocd
 
-              // It watches cluster state and ensures targets are continually synced with what is currently running in your cluster.
-              discovery.kubernetes "pod" {
-                role = "pod"
-                // Restrict to pods on the node to reduce cpu & memory usage
-                selectors {
-                  role = "pod"
-                  field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
-                }
-              }
+# Force delete a specific application with finalizer removal
+
+kubectl patch app alloy -n prometheus -p '{"metadata":{"finalizers":[]}}' --type=merge
+kubectl delete app alloy -n prometheus --force --grace-period=0
+
+
+
 
               // discovery.relabel rewrites the label set of the input targets by applying one or more relabeling rules.
               // If no rules are defined, then the input targets are exported as-is.
@@ -131,34 +132,38 @@ done
 
 
 
+{
+  "model": "gpt-oss",
+  "messages": [{"role": "user", "content": "Tell me about Canada."}],
+  "stream": false,
+  "format": {
+    "type": "object",
+    "properties": {
+      "name": {"type": "string"},
+      "capital": {"type": "string"},
+      "languages": {
+        "type": "array",
+        "items": {"type": "string"}
+      }
+    },
+    "required": ["name", "capital", "languages"]
+  }
+}
 
 
 
-
-
-                apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: alloy
-  namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-spec:
-  destination:
-    namespace: monitoring
-    server: https://kubernetes.default.svc
-  project: monitoring
-  source:
-    repoURL: https://grafana.github.io/helm-charts
-    chart: alloy
-    targetRevision: 1.2.1
-    helm:
-      releaseName: alloy
-      valuesObject:
-        alloy:
-          configMap:
-            content: |-
-              logging {
-                level = "info"
-                format = "logfmt"
-              }
+	__meta_kubernetes_pod_container_name                           = "solidqueue",
+	__meta_kubernetes_pod_controller_kind                          = "ReplicaSet",
+	__meta_kubernetes_pod_controller_name                          = "fiq-solidqueue-58755d7c8b",
+	__meta_kubernetes_pod_host_ip                                  = "192.168.1.211",
+	__meta_kubernetes_pod_ip                                       = "10.42.5.15",
+	__meta_kubernetes_pod_label_app_kubernetes_io_component        = "solidqueue",
+	__meta_kubernetes_pod_label_app_kubernetes_io_instance         = "fiq",
+	__meta_kubernetes_pod_label_app_kubernetes_io_name             = "fiq",
+	__meta_kubernetes_pod_label_pod_template_hash                  = "58755d7c8b",
+	__meta_kubernetes_pod_labelpresent_app_kubernetes_io_component = "true",
+	__meta_kubernetes_pod_labelpresent_app_kubernetes_io_instance  = "true",
+	__meta_kubernetes_pod_labelpresent_app_kubernetes_io_name      = "true",
+	__meta_kubernetes_pod_labelpresent_pod_template_hash           = "true",
+	__meta_kubernetes_pod_name                                     = "fiq-solidqueue-58755d7c8b-fjdz8",
+	__meta_kubernetes_pod_node_name                                = "pve-worker-2",
