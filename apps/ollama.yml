@@ -35,10 +35,10 @@ spec:
               mountPath: /root/.ollama
           resources:
             requests:
-              memory: "4Gi"
+              memory: "10Gi"
               cpu: "500m"
             limits:
-              memory: "8Gi"
+              memory: "12Gi"
               cpu: "2000m"
       containers:
         - name: ollama
