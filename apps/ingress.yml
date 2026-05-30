@@ -58,3 +58,13 @@ spec:
                 number: 11434
           path: /
           pathType: Prefix
+    - host: "openui.godwinogbara.com"
+      http:
+        paths:
+        - backend:
+            service:
+              name: openui
+              port:
+                number: 7878
+          path: /
+          pathType: Prefix
