@@ -38,7 +38,7 @@ spec:
               memory: "10Gi"
               cpu: "500m"
             limits:
-              memory: "12Gi"
+              memory: "10Gi"
               cpu: "2000m"
       containers:
         - name: ollama
@@ -50,7 +50,7 @@ spec:
               memory: "8Gi"
               cpu: "2000m"
             limits:
-              memory: "12Gi"
+              memory: "10Gi"
               cpu: "4000m"
           volumeMounts:
             - name: ollama-data
