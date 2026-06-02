@@ -90,6 +90,66 @@ spec:
                 }
               }
 
+              // Prometheus metrics scraping
+              discovery.kubernetes "nodes" {
+                role = "node"
+              }
+
+              discovery.kubernetes "pods_metrics" {
+                role = "pod"
+              }
+
+              discovery.relabel "pods_metrics" {
+                targets = discovery.kubernetes.pods_metrics.targets
+
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]
+                  action = "keep"
+                  regex = "true"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_port"]
+                  action = "replace"
+                  target_label = "__address__"
+                  regex = "(\\d+)"
+                  replacement = "${1}"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  action = "replace"
+                  target_label = "namespace"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_name"]
+                  action = "replace"
+                  target_label = "pod"
+                }
+              }
+
+              prometheus.scrape "kubernetes_pods" {
+                targets    = discovery.relabel.pods_metrics.output
+                forward_to = [prometheus.remote_write.default.receiver]
+              }
+
+              prometheus.scrape "kubernetes_nodes" {
+                targets    = discovery.kubernetes.nodes.targets
+                forward_to = [prometheus.remote_write.default.receiver]
+                scheme     = "https"
+                bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                tls_config {
+                  insecure_skip_verify = true
+                }
+              }
+
+              prometheus.remote_write "default" {
+                endpoint {
+                  url = "http://192.168.1.220:9090/api/v1/write"
+                }
+              }
+
               livedebugging {
                 enabled = true
               }
