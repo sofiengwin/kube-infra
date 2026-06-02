@@ -167,3 +167,7 @@ kubectl delete app alloy -n prometheus --force --grace-period=0
 	__meta_kubernetes_pod_labelpresent_pod_template_hash           = "true",
 	__meta_kubernetes_pod_name                                     = "fiq-solidqueue-58755d7c8b-fjdz8",
 	__meta_kubernetes_pod_node_name                                = "pve-worker-2",
+
+
+
+                100 - (avg by(node) (rate(process_cpu_seconds_total{mode="idle"}[5m])) * 100)

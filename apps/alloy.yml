@@ -102,14 +102,7 @@ spec:
               discovery.relabel "pods_metrics" {
                 targets = discovery.kubernetes.pods_metrics.targets
 
-                // Only scrape pods with prometheus.io/scrape annotation
-                rule {
-                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]
-                  action = "keep"
-                  regex = "true"
-                }
-
-                // Use custom port if specified
+                // Use custom port if specified, otherwise default to pod IP
                 rule {
                   source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_port", "__meta_kubernetes_pod_ip"]
                   action = "replace"
