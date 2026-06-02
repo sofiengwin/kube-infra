@@ -99,13 +99,108 @@ spec:
                 role = "pod"
               }
 
+              discovery.relabel "pods_metrics" {
+                targets = discovery.kubernetes.pods_metrics.targets
+
+                // Only scrape pods with prometheus.io/scrape annotation
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]
+                  action = "keep"
+                  regex = "true"
+                }
+
+                // Use custom port if specified
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_port", "__meta_kubernetes_pod_ip"]
+                  action = "replace"
+                  regex = "(\\d+);(.+)"
+                  replacement = "$2:$1"
+                  target_label = "__address__"
+                }
+
+                // Use custom path if specified
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_path"]
+                  action = "replace"
+                  target_label = "__metrics_path__"
+                  regex = "(.+)"
+                }
+
+                // Add namespace label
+                rule {
+                  source_labels = ["__meta_kubernetes_namespace"]
+                  action = "replace"
+                  target_label = "namespace"
+                }
+
+                // Add pod label
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_name"]
+                  action = "replace"
+                  target_label = "pod"
+                }
+
+                // Add container label
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_container_name"]
+                  action = "replace"
+                  target_label = "container"
+                }
+
+                // Add node label
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_node_name"]
+                  action = "replace"
+                  target_label = "node"
+                }
+
+                // Add app label from common label patterns
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_label_app"]
+                  action = "replace"
+                  target_label = "app"
+                }
+
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+                  action = "replace"
+                  target_label = "app"
+                }
+              }
+
+              discovery.relabel "nodes_metrics" {
+                targets = discovery.kubernetes.nodes.targets
+
+                // Add node name label
+                rule {
+                  source_labels = ["__meta_kubernetes_node_name"]
+                  action = "replace"
+                  target_label = "node"
+                }
+
+                // Set address to kubelet metrics endpoint
+                rule {
+                  source_labels = ["__meta_kubernetes_node_address_InternalIP"]
+                  action = "replace"
+                  target_label = "__address__"
+                  replacement = "$1:10250"
+                }
+
+                // Set metrics path
+                rule {
+                  action = "replace"
+                  target_label = "__metrics_path__"
+                  replacement = "/metrics"
+                }
+              }
+
               prometheus.scrape "kubernetes_pods" {
-                targets    = discovery.kubernetes.pods_metrics.targets
+                targets    = discovery.relabel.pods_metrics.output
                 forward_to = [prometheus.remote_write.default.receiver]
               }
 
               prometheus.scrape "kubernetes_nodes" {
-                targets    = discovery.kubernetes.nodes.targets
+                targets    = discovery.relabel.nodes_metrics.output
                 forward_to = [prometheus.remote_write.default.receiver]
                 scheme     = "https"
                 bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
